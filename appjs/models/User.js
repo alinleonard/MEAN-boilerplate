@@ -3,28 +3,72 @@ var crypto = require('crypto');
 var mongoose = require('mongoose');
 
 var userSchema = new mongoose.Schema({
-	email: { type:String, unique: true, lowercase: true },
+
+	email: { 
+		type:String,
+		unique: true,
+		lowercase: true,
+		trim: true
+	},
+
 	password: String,
 
 	profile: {
-		name: {type: String, default: ''},
-		gender: {type: String, enum: ['Male', 'Female']},
-		location: { type: String, default: ''},
-		phone: { type: String, default: ''}
+		firstName: {
+			type: String,
+			trim: true
+		},
+		lastName: {
+			type: String,
+			trim: true
+		},
+		displayName: {
+			type: String,
+			trim: true
+		},
+		gender: {
+			type: String,
+			enum: ['Male', 'Female']
+		},
+		location: { 
+			type: String,
+			 default: ''
+		},
+		phone: { 
+			type: String,
+			default: ''
+		}
 	},
 
 	preferences: {
-		timezone: {type: String, default: ''},
-		unit_of_measure: { type: String, enum:['metric','imperial','imperial_decimal']}
+		timezone: {
+			type: String,
+			default: ''
+		},
+		unit_of_measure: { 
+			type: String,
+			enum:['metric','imperial','imperial_decimal']
+		}
 	},
 
 	subscription: {
 		// work to be done
 	},
 
-	created_at: { type: Date, default: Date.now },
-	admin: { type: Boolean, default: false },
-    login_at : Date, // V om salva de fiecare data canse se logheaza data de logare
+	created: { 
+		type: Date,
+		default: Date.now
+	},
+	
+	roles: {
+		type: [{
+			type: String,
+			enum: ['user', 'admin']
+		}],
+		default: ['user']
+	}
+
+    updated : Date, 
 
 	/*
 	Note: Properties resetPasswordToken and resetPassword are not part of the above document,

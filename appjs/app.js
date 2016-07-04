@@ -1,5 +1,5 @@
 var express = require('express');
-var swig = require('swig');
+var nunjucks = require('nunjucks');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -14,22 +14,30 @@ var users = require('./routes/users');
 var app = express();
 
 //  Connect to MongoDB
-var MongoURI = process.env.MONGO_URI || 'mongodb://localhost/node-superhero';
-mongoose.connect(MongoURI, function(err, res){
-  if(err) {
-    console.log('Error connect to: ' + MongoURI + '.' + err);
-  } else {
-    console.log('MongoDB connected successfully to ' + MongoURI);
-  }
+// var MongoURI = process.env.MONGO_URI || 'mongodb://localhost/node-superhero';
+// mongoose.connect(MongoURI, function(err, res){
+//   if(err) {
+//     console.log('Error connect to: ' + MongoURI + '.' + err);
+//   } else {
+//     console.log('MongoDB connected successfully to ' + MongoURI);
+//   }
+// });
+
+nunjucks.configure('views', {
+    tags: {
+      variableStart: '<$',
+      variableEnd: '$>'
+    },
+    autoescape: true,
+    watch: true,
+    express: app
 });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 // set template engine to swig
-var swig = new swig.Swig();
-app.engine('html', swig.renderFile);
-app.set('view engine', 'html');
-
+app.engine('html', nunjucks.render);
+app.set( 'view engine', 'html') ;
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -38,6 +46,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+//Bower
+app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 
 app.use('/', routes);
 app.use('/users', users);

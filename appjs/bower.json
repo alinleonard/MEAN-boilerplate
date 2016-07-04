@@ -1,0 +1,23 @@
+{
+  "name": "appjs",
+  "description": "",
+  "main": "",
+  "authors": [
+    "AlinLeonard <balinleonard@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/alinleonard/MEAN-boilerplate",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "font-awesome": "^4.6.3",
+    "angular-material": "^1.0.9",
+    "moment": "^2.14.1"
+  }
+}

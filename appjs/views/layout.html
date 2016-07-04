@@ -1,12 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="myApp">
 <head>
 	<meta charset="utf-8">
 	<title>{{ title }}</title>
-	<link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+	<!-- Font awsome -->
+  	<link rel="stylesheet" type="text/css" href="/bower_components/font-awesome/css/font-awesome.min.css">
+  	<!-- default style -->
+	<link rel="stylesheet" type="text/css" href="dist/css/style.min.css">
 </head>
 <body>
 	{% block content %}
 	{% endblock %}
+
+	<!-- Angular -->
+	<script src="/bower_components/angular/angular.js"></script>
+	<script src="/bower_components/angular-aria/angular-aria.js"></script>
+	<script src="/bower_components/angular-animate/angular-animate.js"></script>
+
+	<!-- Main -->
+	<script src="dist/js/app.min.js"></script>
+
+	<script src="//localhost:35729/livereload.js"></script>
 </body>
 </html>
