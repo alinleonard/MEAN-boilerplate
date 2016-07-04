@@ -79,4 +79,11 @@ router.post('/sign-up', function(req, res){
 
 });
 
+router.all('/logout', function(req, res, next) {
+  req.logout();
+  console.log('logged out succesfully !');
+  res.redirect('/');
+});
+
+
 module.exports = router;
