@@ -66,9 +66,12 @@ var userSchema = new mongoose.Schema({
 			enum: ['user', 'admin']
 		}],
 		default: ['user']
-	}
+	},
 
-    updated : Date, 
+    updated : {
+    	type: Date,
+    	default: Date.now
+    }, 
 
 	/*
 	Note: Properties resetPasswordToken and resetPassword are not part of the above document,

@@ -7,21 +7,32 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
+// Mail
+var nodemailer = require('nodemailer');
+// Auth
+var session = require('express-session');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var bcrypt = require('bcrypt-nodejs');
+var async = require('async');
+var crypto = require('crypto'); 
+
 // Routes
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var api = require('./routes/api');
 
 var app = express();
 
-//  Connect to MongoDB
-// var MongoURI = process.env.MONGO_URI || 'mongodb://localhost/node-superhero';
-// mongoose.connect(MongoURI, function(err, res){
-//   if(err) {
-//     console.log('Error connect to: ' + MongoURI + '.' + err);
-//   } else {
-//     console.log('MongoDB connected successfully to ' + MongoURI);
-//   }
-// });
+//Connect to MongoDB
+var MongoURI = process.env.MONGO_URI || 'mongodb://localhost/node-superhero';
+mongoose.connect(MongoURI, function(err, res){
+  if(err) {
+    console.log('Error connect to: ' + MongoURI + '.' + err);
+  } else {
+    console.log('MongoDB connected successfully to ' + MongoURI);
+  }
+});
 
 nunjucks.configure('views', {
     tags: {
@@ -49,8 +60,45 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Bower
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 
+app.use(session({
+  secret: 'my app secret key', // help crypt sessions
+  resave: true, // updates session on each page view even if it did not change
+  saveUninitialized: false // sessions are not stored if they are empty
+}));
+
+// Passport configuration
+app.use(passport.initialize());
+app.use(passport.session());
+
+var User = require('./models/User');
+
+passport.use(new LocalStrategy({ usernameField: 'email' }, function(email, password, done) {
+  email = email.toLowerCase();
+  User.findOne({ email: email }, function(err, user) {
+    if (!user) return done(null, false, { message: 'Email ' + email + ' not found'});
+    user.comparePassword(password, function(err, isMatch) {
+      if (isMatch) {
+        return done(null, user);
+      } else {
+        return done(null, false, { message: 'Invalid email or password.' });
+      }
+    });
+  });
+}));
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
+
 app.use('/', routes);
-app.use('/users', users);
+app.use('/', users);
+app.use('/api', api);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

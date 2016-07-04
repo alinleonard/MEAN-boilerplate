@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+	
+	<div class="container" >
+		<h1>Sign In</h1>
+		<form action="/sign-in" method="post">
+			<div class="form-group">
+				<label>Email:</label>
+				<input class="form-control" type="email" name="email">
+			</div>
+			<div class="form-group">
+				<label>Password:</label>
+				<input class="form-control" type="password" name="password">
+			</div>
+			<div>
+				<input class="btn btn-primary" type="submit" name="Login">
+			</div>
+		</form>
+		
+	</div>
+
+{% endblock %}
