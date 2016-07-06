@@ -15,7 +15,7 @@ Make sure you have installed all of the following prerequisites on your developm
 
 * GIT
 * Node.Js
-* MongoDb
+* MongoDB
 * Bower
 ```
 $ npm install -g bower
